@@ -34,6 +34,22 @@ const server = http.createServer((req, res) => {
       readStream.pipe(res);
     });
   }
+  else if (req.url === '/video1.mp4') {
+    const videoPath = path.join(__dirname, 'video1.mp4');
+    fs.stat(videoPath, (err, stat) => {
+      if (err) {
+        res.writeHead(404);
+        res.end(JSON.stringify(err));
+        return;
+      }
+      res.writeHead(200, {
+        'Content-Type': 'video1/mp4',
+        'Content-Length': stat.size
+      });
+      const readStream = fs.createReadStream(videoPath);
+      readStream.pipe(res);
+    });
+  }
   // Handle other paths
   else {
     res.writeHead(404);
